@@ -13,15 +13,23 @@ const teamOneLabel = document.getElementById('team-one-name');
 const teamTwoLabel = document.getElementById('team-two-name');
 const teamOneScore = document.querySelector('team-one-score');
 const teamTwoScore = document.querySelector('team-two-score');
+const game = document.querySelector('.game');
 
 
 // create an array to hold on to the state of past games
 
+let currentGameState = {
+    name1: '',
+    name2: '',
+    score1: 0,
+    score2: 0
+};
+
 let pastGames = [];
-let name1 = '';
-let name2 = '';
-let score1 = 0;
-let score2 = 0;
+// let name1 = '';
+// let name2 = '';
+// let score1 = 0;
+// let score2 = 0;
 
 nameForm.addEventListener('submit', (e) => {
     // don't forget to prevent the default form behavior!
@@ -31,8 +39,8 @@ nameForm.addEventListener('submit', (e) => {
     const form = new FormData(nameForm);
 
     // set the state to this data from the form
-    name1 = form.get('team-one');
-    name2 = form.get('team-two');
+    currentGameState.name1 = form.get('team-one');
+    currentGameState.name2 = form.get('team-two');
     // reset the form values
     nameForm.reset();
 
@@ -42,41 +50,36 @@ nameForm.addEventListener('submit', (e) => {
 
 teamOneAddButton.addEventListener('click', () => {
     // increment the current state for team one's score
-    score1++;
+    currentGameState.score1++;
     displayCurrentGameEl();});
 
 teamTwoAddButton.addEventListener('click', () => {
     // increment the current state for team two's score
-    score2++;
+    currentGameState.score2++;
     displayCurrentGameEl();
 });
 
 teamOneSubtractButton.addEventListener('click', () => {
     // decrement the current state for team one's score
-    score1--;
+    currentGameState.score1--;
     displayCurrentGameEl();
 });
 
 teamTwoSubtractButton.addEventListener('click', () => {
     // decrement the current state for team two's score
-    score2--;
+    currentGameState.score2--;
     displayCurrentGameEl();
 });
 
 finishGameButton.addEventListener ('click', () => {
     // add the current game to an array of games in state.
+    // currentGameEl.textContent = '';
     // HINT: it will be helpful to keep track of these games as objects with 4 properties, one for each piece of state we're tracking
-    let currentGameState = {
-        name1: name1,
-        name2: name2,
-        score1: score1,
-        score2: score2
-    };
-    let pushThis = currentGameState;
+    // console.log(currentGameState);
+    console.log(currentGameState);
+    pastGames.push({...currentGameState});
     console.log(pastGames);
-    pastGames.push(pushThis);
-    console.log(pastGames);
-    resetCurrentState();
+    // resetCurrentState();
     // currentGameState.name1 = '';
     // currentGameState.name2 = '';
     // currentGameState.score1 = 0;
@@ -89,10 +92,10 @@ finishGameButton.addEventListener ('click', () => {
 });
 
 function resetCurrentState() {
-    name1 = '';
-    name2 = '';
-    score1 = 0;
-    score2 = 0;
+    currentGameState.name1 = '';
+    currentGameState.name2 = '';
+    currentGameState.score1 = 0;
+    currentGameState.score2 = 0;
 }
 
 
@@ -101,16 +104,10 @@ function displayCurrentGameEl() {
     currentGameEl.textContent = '';
     // change the label to show team one's name;
     // change the label to show team two's name;
-    teamOneLabel.textContent = name1;
-    teamTwoLabel.textContent = name2;
+    teamOneLabel.textContent = currentGameState.name1;
+    teamTwoLabel.textContent = currentGameState.name2;
     // call the render game function to create a game element
     // for(let )
-    let currentGameState = {
-        name1: name1,
-        name2: name2,
-        score1: score1,
-        score2: score2
-    };
     const currentGame = renderGame(currentGameState);
     // append the element to the cleared out current game div
     currentGameEl.append(currentGame);
